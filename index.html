@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>WebGPU 支持检测</title>
+</head>
+<body>
+  <h1 id="result">检测中…</h1>
+
+  <script>
+    async function checkWebGPU() {
+      if (!('gpu' in navigator)) {
+        return '❌ 浏览器不支持 WebGPU（navigator.gpu 不存在）';
+      }
+
+      const adapter = await navigator.gpu.requestAdapter();
+      if (!adapter) {
+        return '⚠️ 浏览器支持 WebGPU，但当前环境无法获取 GPU Adapter';
+      }
+
+      const device = await adapter.requestDevice();
+      if (!device) {
+        return '⚠️ WebGPU 可用，但无法创建设备';
+      }
+
+      return '✅ 浏览器支持 WebGPU';
+    }
+
+    checkWebGPU().then(result => {
+      document.getElementById('result').textContent = result;
+    });
+  </script>
+</body>
+</html>
